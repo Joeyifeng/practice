@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>test</title>
+</head>
+<body>
+    <h1>restaurant</h1>
+    <p>health</p>
+    <p class="J_rate">
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+    </p>
+    <p>price</p>
+    <p class="J_rate">
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+    </p>
+    <p>taste</p>
+    <p class="J_rate">
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>
+        <img src="src/1.png"/>        
+    </p>
+    <script type="text/javascript">
+        var GLOBAL={};
+        GLOBAL.namespace = function(str){
+            var arr = str.split("."),o=GLOBAL;
+            for(i=(arr[0] == "GLOBAL")? 1:0;i<arr.length;i++){//当传入类似GLOBAL.a,只需从arr[1]开始为a赋值
+                o[arr[i]] = o[arr[i]]||{};//当o[arr[i]]已经定义,不改变;当o[arr[i]]无定义,则定义为空对象
+                o = o[arr[i]];//将o对象向下赋值
+            }
+        };
+        GLOBAL.namespace("Dom");//为Dom开创命名空间
+        GLOBAL.Dom.getElementsByClassName = function(str,root,tag){
+            if(root){
+                root = typeof root == "string" ? document.getElementById(root):root;
+            }else{
+                root = document.body;
+            }
+            tag = tag||"*";//* 获取所有节点
+            var els = root.getElementsByTagName(tag),arr=[];
+            for(var i = 0,n = els.length;i<n;i++){//遍历所有节点
+                for(var j=0,k=els[i].className.split(" "),l=k.length;j<l;j++){//取节点上的所有class
+                    if(k[j] == str){    //如果className名字相同
+                        arr.push(els[i]);   //则存入arr数组,arr数组是具有相同的className的结点数组
+                        break;
+                    }
+                }
+            }
+            return arr;
+        }
+        GLOBAL.namespace("Event");
+        GLOBAL.Event.on = function(node,eventType,handler,scope){
+            node = typeof node == "string"? document.getElementById(node) :node;
+            scope = scope|| node;   //如果没有定义SCOPE,则当前的执行环境为node(结点)
+            if(document.all){   //for IE
+                node.attachEvent("on"+eventType,function(){
+                    handler.apply(scope)    //为handler绑定执行环境
+                });
+            }else{
+                node.addEventListener(eventType,function(){
+                    handler.apply(scope)
+                },false);
+            }
+        }
+
+        /*function Rate(rateRoot){    //传入img的父结点
+            var root = typeof rateRoot == "string"? document.getElementById(rateRoot): rateRoot;
+            var items = root.getElementsByTagName("img");//获取该项下的所有img标签
+            var imgs = ["src/1.png","src/2.png"];
+            var rateFlag;   //标志, 判断是否已经打分
+            for(var i=0,n=items.length;i<n;i++){    //遍历某项下的所有img
+                items[i].index =i;  //分别为img附上序号
+                GLOBAL.Event.on(items[i],"mouseover",function(){    //为每个img绑定事件
+                    if(rateFlag) return;    //判断rateFlag,若为true,则已经打分，退出函数
+                    for(var j=0;j<n;j++){   //替换图片
+                        if(j<=this.index){
+                            items[j].src = imgs[1];
+                        }else{
+                            items[j].src = imgs[0];
+                        }
+                    }
+                });
+                GLOBAL.Event.on(items[i],"mouseout",function(){
+                    if(rateFlag) return;
+                    for(var j=0;j<n;j++){
+                        items[j].src=imgs[0];
+                    }
+                });
+                GLOBAL.Event.on(items[i],"click",function(){
+                    if(rateFlag) return;
+                    rateFlag = true;    //设置rateFlag
+                    console.log("you gave "+(this.index+1)+" point");
+                });
+            }
+        }*/
+        function Rate(rateRoot){
+            var root = typeof rateRoot == "string"? document.getElementById(rateRoot): rateRoot;
+            var items = root.getElementsByTagName("img");
+            var imgs = ["src/1.png","src/2.png"];
+            var rateFlag ;
+            for(var i=0,n=items.length;i<n;i++){
+                items[i].index = i;
+            }
+            GLOBAL.Event.on(root,"mouseover",function(e){
+                e = window.event||e;
+                if(rateFlag) return;
+                var target = e.srcElement||e .target;
+                if(target.tagName.toLowerCase()!="img") return ;
+                for(var i=0;i<n;i++){
+                    if(i<=target.index){
+                        items[i].src = imgs[1];
+                    }else{
+                        items[i].src = imgs[0];
+                    }
+                }
+            });
+            GLOBAL.Event.on(root,"mouseout",function(e){
+                e = window.event||e;
+                if(rateFlag) return ;
+                var target = e.target||e.srcElement;
+                for(var i=0,n=items.length;i<n;i++){
+                    items[i].src = imgs[0];
+                }
+            });
+            GLOBAL.Event.on(root,"click",function(e){
+                e = window.event||e;
+                if(rateFlag) return ;
+                rateFlag = true;
+                var target = e.target||e.srcElement;
+                alert((target.index+1)+"point");
+            });
+        }
+
+        var rateNodes = GLOBAL.Dom.getElementsByClassName("J_rate");//获取打分项
+        for(var i=0,n=rateNodes.length;i<n;i++){//遍历每个打分项
+            Rate(rateNodes[i]); //遍历每个打分项目下的img
+        }
+    </script>
+</body>
+</html>
