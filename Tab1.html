@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        /* fisrt 纵向菜单栏 */
+        #first ul{
+            list-style: none;
+        }
+        #first li a{
+            display: block;
+            width: 80px; 
+            height: 30px;
+            line-height: 30px;
+            background: #efefef;
+            text-decoration: none;
+            text-indent: 20px;  /* 这里用缩进而不用padding,用padding整体宽度变长 */
+            margin-bottom: 2px;
+        }
+        #first li a:hover{
+            background: #F60;
+            color: white;
+        }
+        /* second */ 
+        #second ul{
+            list-style: none;
+        }
+        #second li a{
+            display: block;
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            background: #efefef;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 2px;
+        }
+        #second li {
+            float: left;
+        }
+        #second li a:hover{
+            background: #F60;
+            color: white;
+        }
+        /* third */
+        #third ul{
+            list-style: none;
+            height: 30px;
+            border-bottom: 3px solid #f60;
+        }
+        #third li {
+            float: left;
+        }
+        #third li a{
+            display: block;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            background: #efefef;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 2px;
+            background: url(src/btnBg.png);  /* position 默认为 0 0 */
+        }
+        #third .on, #third li a:hover{
+            background-position: 0 -30px;
+            color: white;
+        }
+        /* forth li设置为浮动后，ul高度塌陷，为ul设置为li>a的高度，则border-bottom刚好在tab方框的下方*/
+        #forth ul{
+            list-style: none;
+            height: 30px;   
+            border-bottom: 3px solid #f60;
+        }
+        #forth li {
+            float: left;
+        }
+        #forth li a{
+            display: block;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            background: #efefef;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 2px;
+        }
+        #forth .on, #forth li a:hover{
+            margin-top: -10px;    /*这里是将整个方块上移10px,因为height由30px-->40px */
+            background-color: #f60;
+            line-height: 40px;
+            height:40px;
+            color: white;
+        }
+        /* fifth  通过JS为tab 设置宽度*/
+        #fifth ul{
+            list-style: none;
+            height: 30px;
+            border-bottom: 3px solid #f60;
+        }
+        #fifth li {
+            float: left;
+        }
+        #fifth li a{
+            display: block;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            background: #efefef;
+            text-decoration: none;
+            text-align: center;
+            margin-right: 2px;
+        }
+        #fifth .on, #fifth li a:hover{
+            background-color: #f60;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload=function(){
+            var fifth = document.getElementById("fifth");
+            var aTag = fifth.getElementsByTagName('a');
+            for(var i=aTag.length;i--;){
+                aTag[i].onmouseover = function(){
+                    var This = this;
+                    clearInterval(this.close);
+                    This.show = setInterval(function(){
+                        This.style.width = This.offsetWidth+8+'px'; 
+                        if(This.offsetWidth>=160)
+                            clearInterval(This.show);
+                    },30)
+                }
+                aTag[i].onmouseout = function(){
+                    var This = this;
+                    clearInterval(this.show); 
+                    This.close = setInterval(function(){
+                        This.style.width= This.offsetWidth-8+'px';
+                        if(This.offsetWidth<=120)
+                            clearInterval(This.close);                    
+                    },30);
+                };
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="first">
+        <ul>
+            <li><a href="">AAAA</a></li>
+            <li><a href="">BBBB</a></li>
+            <li><a href="">CCCC</a></li>
+            <li><a href="">DDDD</a></li>
+        </ul>
+    </div>
+    <div id="second">
+        <ul>
+            <li><a href="">AAAA</a></li>
+            <li><a href="">BBBB</a></li>
+            <li><a href="">CCCC</a></li>
+            <li><a href="">DDDD</a></li>
+        </ul>
+    </div>
+    <div style="content:'';clear: both;display: block; "></div>
+    <div id="third">
+        <ul>
+            <li><a class="on" href="">AAAA</a></li>
+            <li><a href="">BBBB</a></li>
+            <li><a href="">CCCC</a></li>
+            <li><a href="">DDDD</a></li>
+        </ul>
+    </div>
+    <div id="forth">
+        <ul>
+            <li><a class="on" href="">AAAA</a></li>
+            <li><a href="">BBBB</a></li>
+            <li><a href="">CCCC</a></li>
+            <li><a href="">DDDD</a></li>
+        </ul>
+    </div>
+    <div id="fifth">
+        <ul>
+            <li><a class="on" href="">AAAA</a></li>
+            <li><a href="">BBBB</a></li>
+            <li><a href="">CCCC</a></li>
+            <li><a href="">DDDD</a></li>
+        </ul>
+    </div>
+    
+</body>
+</html>
