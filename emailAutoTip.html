@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>emailAutoTip</title>
+    <style type="text/css">
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        input{
+            width: 300px;
+            height: 35px;
+            border: 1px solid #000;
+            margin: 0 auto;
+            margin-top: 200px;
+            display: block;
+            padding-left: 4px;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+        }
+        ul{
+            width: 304px;
+            border: 1px solid #000;
+            margin: 0 auto;
+            margin-top: -1px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+            display: none;
+        }
+        li{
+            list-style: none;
+            padding: 4px 0 2px 8px;
+        }
+        .searchInput{
+            position: relative;
+        }
+        .active{
+            background: #79A3AC;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="searchInput">
+        <input id="input" type="text" placeholder="请输入用户名/邮箱/昵称">
+        <ul id="sUl">
+            <li>请选择或继续输入...</li>
+            <li class="active"></li>
+            <li email="@sina.com">@sina.com</li>
+            <li email="@163.com">@163.com</li>
+            <li email="@126.com">@126.com</li>
+            <li email="@vip.com">@vip.com</li>
+            <li email="@qq.com">@qq.com</li>
+            <li email="@yahoo.com">@yahoo.com</li>
+            <li email="@gmail.com">@gmail.com</li>
+            <li email="@188.com">@188.com</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        window.onload = function(){
+            var tip = new Tip();
+            tip.init();
+        };
+        function Tip(){
+            this.sInput = document.getElementById("input");
+            this.sUl = document.getElementById("sUl");
+            this.sLi = sUl.getElementsByTagName("li");
+        }
+        Tip.prototype = {
+            init : function(){
+                this.toChange();
+                this.toBlur();
+                this.sele();
+            },
+            toChange: function(){
+                var ie = !-[1,];
+                var that = this;
+                if(ie){
+                    this.sInput.onpropertychange = function(){
+                        that.toShow();
+                    }
+                }else{
+                    this.sInput.oninput = function(){
+                        that.toShow();
+                    }
+                }
+            },
+            toShow: function(){
+                var value= this.sInput.value;
+                var re = new RegExp('@'+value.substring(value.indexOf('@')+1));
+                this.sUl.style.display = "block";
+                if(re.test(value)){
+                    this.sLi[1].innerHTML = value;
+                    for(var i =2;i<this.sLi.length;i++){
+                        var sEmail = this.sLi[i].getAttribute("email");
+                        if(re.test(sEmail)){
+                            this.sLi[i].innerHTML = value.substring(0,value.indexOf('@'))+sEmail;
+                            if(this.sLi[1].innerText!=this.sLi[i].innerText){
+                                this.sLi[i].style.display = 'block';
+                            }else{
+                                this.sLi[i].style.display = 'none';
+                            }
+                        }else{
+                            this.sLi[i].style.display = 'none';
+                        }
+                    }
+                }else{
+                    this.sUl.style.display = 'block';
+                    this.sLi[1].innerHTML = value;
+                    for(var i = 2;i<this.sLi.length;i++){
+                        this.sLi[i].innerHTML = value+this.sLi[i].getAttribute('email');
+                    }
+                }                
+            },
+            toBlur: function(){
+                var that = this;
+                this.sInput.onblur = function(){
+                    that.sUl.style.display = 'none';
+                }
+            },
+            sele: function(){
+                var iNow = 1;
+                if(this.sInput.value == ''){
+                    this.sLi[1].className='';
+                }
+                for(var i =0;i<this.sLi.length;i++){
+                    var that = this;
+                    this.sLi[i].onmouseover = function(ev){
+                        this.className = 'active';
+                    };
+                    this.sLi[i].onmouseout = function(ev){
+                        this.className = '';
+                    };
+                    this.sLi[i].onmousedown = function(ev){
+                        that.sInput.value = ev.target.innerHTML;
+                    }
+                }
+
+                var that = this;
+                this.sInput.onkeydown = function(ev){
+                    var ev = ev || window.event;
+                    if(ev.keyCode == 38){
+                        if(iNow == 1){
+                            iNow = that.sLi.length;
+                        }
+                        iNow--;
+                        for(var i=1;i<that.sLi.length;i++){
+                            that.sLi[i].className = '';
+                        }
+                        that.sLi[iNow].className = 'active';
+                    }else if(ev.keyCode == 40){
+                        iNow++;
+                        if(iNow == that.sLi.length){
+                            iNow =1;
+                        }
+                        for(var i =1;i<that.sLi.length;i++){
+                            that.sLi[i].className = '';
+                        }
+                        that.sLi[iNow].className = 'active';
+                    }else if(ev.keyCode == 13){
+                        that.sInput.value = that.sLi[iNow].innerHTML;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
