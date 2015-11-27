@@ -9,6 +9,7 @@ body{
 	width: 800px;
 	height: 280px;
 	margin: 50px auto;
+	position: relative;
 }
 
 .box .link{
@@ -131,7 +132,7 @@ body{
 .button .line-left{
 	height: 0;
 	width: 2px;
-	bottom: -110%;
+	bottom: -110%;		/* bottom 和下面的bottom照应，从-110% 到 -2px ，就会有过渡的效果，否则就没有 */
 	left: -2px;	
 }
 
@@ -141,3 +142,34 @@ body{
 }
 
 
+.box .tip{
+	position: absolute;
+	padding: 0 14px;
+	top: 100px;
+	background: #2DCB70;
+	height: 35px;
+	line-height: 35px;
+	font-size: 14px;
+	border-radius: 3px;
+	-o-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	opacity: 0;
+}
+.box .tip em{
+	font-style: normal;
+}
+
+.box .tip span {
+	display: block;
+	position: absolute;
+	overflow: hidden;
+	top: 35px;
+	width: 0;
+	height: 0;
+	left: 50%;
+	margin-left: -3px;
+	border: 7px solid transparent;		/* 三角形大小取决于border大小 */
+	border-top-color: #2DCB70;				/* 决定三角形朝向 */
+}

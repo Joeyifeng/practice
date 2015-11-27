@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BtnMadebyA</title>
+    <style>
+        a{display: inline-block;text-decoration: none;height:40px;line-height:40px;background:url(src/BtnMadebyA.png);padding-left:15px;}
+        a:hover{background-position: 0 -80px;}
+        a span{display: inline-block;color: #fff;height:40px;background:url(src/BtnMadebyA.png) right -40px;padding-right: 15px;}
+        a:hover span{background-position: right -120px;}
+        /* span标签没有hover伪类的解决方法 */      
+        .css3{display: inline-block;height:40px;border-radius:5px;background: url(src/BtnMadebyA1.png);padding:0 15px;color:#fff;border-color: blue;}
+        .css3:hover{background-position: 0 -40px;}
+    </style>
+</head>
+<body>
+    <a href="#"><span>按钮按钮按钮</span></a><!-- 传统图片自做按钮 -->
+    <a class="css3" href="javascript:void(0);">按钮按钮按钮</a><!-- css3制作按钮 -->
+</body>
+</html>
